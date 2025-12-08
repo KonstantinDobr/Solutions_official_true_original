@@ -5,24 +5,24 @@
 
 class IPv4 {
 private:
-    std::array<std::uint8_t, 4> blocks = {0, 0, 0, 0};
+    std::array<std::uint8_t, 4> blocks_ = {0, 0, 0, 0};
 
 public:
     IPv4() = default;
 
-    explicit IPv4(std::array<std::uint8_t, 4> blocks) : blocks(blocks) {}
+    explicit IPv4(std::array<std::uint8_t, 4> blocks_) : blocks_(blocks_) {}
 
-    explicit IPv4(std::uint8_t p1, std::uint8_t p2, std::uint8_t p3, std::uint8_t p4) : blocks({p1, p2, p3, p4}) {}
+    explicit IPv4(std::uint8_t p1, std::uint8_t p2, std::uint8_t p3, std::uint8_t p4) : blocks_({p1, p2, p3, p4}) {}
 
     IPv4(const IPv4 &other) = default;
 
     IPv4 &operator++() {
         for (int i = 3; i >= 0; --i) {
-            if (blocks[i] != 255) {
-                ++blocks[i];
+            if (blocks_[i] != 255) {
+                ++blocks_[i];
                 return *this;
             }
-            blocks[i] = 0;
+            blocks_[i] = 0;
         }
         return *this;
     }
@@ -35,11 +35,11 @@ public:
 
     IPv4 &operator--() {
         for (int i = 3; i >= 0; --i) {
-            if (blocks[i] != 0) {
-                --blocks[i];
+            if (blocks_[i] != 0) {
+                --blocks_[i];
                 return *this;
             }
-            blocks[i] = 255;
+            blocks_[i] = 255;
         }
         return *this;
     }
@@ -50,24 +50,24 @@ public:
         return copy;
     }
 
-    friend bool operator==(const IPv4 &lhs, const IPv4 &rhs) { return lhs.blocks == rhs.blocks; }
+    friend bool operator==(const IPv4 &lhs, const IPv4 &rhs) { return lhs.blocks_ == rhs.blocks_; }
 
-    friend bool operator<=(const IPv4 &lhs, const IPv4 &rhs) { return lhs.blocks <= rhs.blocks; }
+    friend bool operator<=(const IPv4 &lhs, const IPv4 &rhs) { return lhs.blocks_ <= rhs.blocks_; }
 
-    friend bool operator>=(const IPv4 &lhs, const IPv4 &rhs) { return lhs.blocks >= rhs.blocks; }
+    friend bool operator>=(const IPv4 &lhs, const IPv4 &rhs) { return lhs.blocks_ >= rhs.blocks_; }
 
-    friend bool operator!=(const IPv4 &lhs, const IPv4 &rhs) { return lhs.blocks != rhs.blocks; }
+    friend bool operator!=(const IPv4 &lhs, const IPv4 &rhs) { return lhs.blocks_ != rhs.blocks_; }
 
-    friend bool operator<(const IPv4 &lhs, const IPv4 &rhs) { return lhs.blocks < rhs.blocks; }
+    friend bool operator<(const IPv4 &lhs, const IPv4 &rhs) { return lhs.blocks_ < rhs.blocks_; }
 
-    friend bool operator>(const IPv4 &lhs, const IPv4 &rhs) { return lhs.blocks > rhs.blocks; }
+    friend bool operator>(const IPv4 &lhs, const IPv4 &rhs) { return lhs.blocks_ > rhs.blocks_; }
 
     friend std::ostream &operator<<(std::ostream &os, const IPv4 &ip) {
         std::stringstream ss;
-        ss << static_cast<int>(ip.blocks[0]) << '.'
-           << static_cast<int>(ip.blocks[1]) << '.'
-           << static_cast<int>(ip.blocks[2]) << '.'
-           << static_cast<int>(ip.blocks[3]);
+        ss << static_cast<int>(ip.blocks_[0]) << '.'
+           << static_cast<int>(ip.blocks_[1]) << '.'
+           << static_cast<int>(ip.blocks_[2]) << '.'
+           << static_cast<int>(ip.blocks_[3]);
         return os << ss.str();
     }
 
@@ -84,13 +84,13 @@ public:
         char dot{};
 
         ss >> p1 >> dot >> p2 >> dot >> p3 >> dot >> p4;
-        ip.blocks = {static_cast<uint8_t>(p1), static_cast<uint8_t>(p2), static_cast<uint8_t>(p3),
+        ip.blocks_ = {static_cast<uint8_t>(p1), static_cast<uint8_t>(p2), static_cast<uint8_t>(p3),
                      static_cast<uint8_t>(p4)};
         return is;
     }
 };
 
-int main() {
+void main_test() {
     IPv4 ip1(192, 168, 1, 1);
     IPv4 ip2(std::array<uint8_t, 4>{10, 0, 0, 1});
 
@@ -113,8 +113,15 @@ int main() {
     std::cout << "ip1 != ip2: " << (ip1 != ip2) << std::endl;
     std::cout << "ip1 < ip2: " << (ip1 < ip2) << std::endl;
     std::cout << "ip1 > ip2: " << (ip1 > ip2) << std::endl;
+}
 
+void input_test() {
     IPv4 ip5;
     std::cin >> ip5;
     std::cout << ip5 << std::endl;
+}
+
+int main() {
+    main_test();
+    input_test();
 }
